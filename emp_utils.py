@@ -1,5 +1,5 @@
 import gc
-
+import os
 
 class _const:
     class ConstError(TypeError):
@@ -10,6 +10,14 @@ class _const:
             raise self.ConstError("Can't rebind const (%s)" % name)
         else:
             self.__dict__[name] = value
+
+def config_path():
+    try:
+        return len(os.listdir('config'))
+    except:
+        os.mkdir('config')
+    finally:
+        return len(os.listdir('config'))
 
 
 def rainbow(output, color=None):
@@ -36,10 +44,13 @@ def print_right_just(output, length):
     return (length - len(output)) * ' ' + output
 
 
-def print_as_a_list_item(index, title, subtile):
+def print_as_a_list_item(index, title, subtile=None):
     index = ('[%s]' % str(index)).center(8).lstrip()
     title = print_left_just(rainbow(title, color='green'))
-    subtile = '\n' + len(index) * ' ' + subtile
+    if subtile:
+        subtile = '\n' + len(index) * ' ' + subtile
+    else:
+        subtile = ''
     return index + title + subtile
 
 

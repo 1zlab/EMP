@@ -1,9 +1,13 @@
 import network
 import json
 from emp_utils import rainbow
+from emp_utils import print_as_a_list_item
+from emp_utils import selection
+from emp_utils import config_path
+
 
 class WifiHelper():
-    profile = 'wifi_config.json'
+    profile = 'config/emp_wifi.json'
 
     @classmethod
     def create_profile(cls):
@@ -15,6 +19,7 @@ class WifiHelper():
 
     @classmethod
     def update_profile(cls, config):
+        config_path()
         with open(cls.profile, 'w') as f:
             f.write(json.dumps(config))
 
@@ -35,8 +40,19 @@ class WifiHelper():
         return config.get('default') if config else ()
 
     @classmethod
-    def set_default(cls,essid):
-        pass
+    def set_default(cls, essid):
+        config = cls.read_config()
+        records = config.get('records')
+
+        for index, item in enumerate(records):
+            print(print_as_a_list_item(index, item))
+
+        default = selection(
+            'Please select an option as default wifi connection [0-%s]' % str(
+                len(records - 1)), len(records - 1))
+        
+        config['default'] = records[default]
+        cls.update_profile(config)
 
     @classmethod
     def get_records(cls):
@@ -173,9 +189,9 @@ class Wifi():
 
             else:
                 info = self._wifi.ifconfig()
-                print(rainbow('IP: '+ info[0], color='red'))
-                print(rainbow('netmask: '+ info[1], color='green'))
-                print(rainbow('gate: '+ info[2], color='blue'))
+                print(rainbow('IP: ' + info[0], color='red'))
+                print(rainbow('netmask: ' + info[1], color='green'))
+                print(rainbow('gate: ' + info[2], color='blue'))
                 if not WifiHelper.is_in_records(essid):
                     WifiHelper.add_record(essid, passwd)
                 return True
@@ -184,4 +200,3 @@ class Wifi():
 if __name__ == '__main__':
     wifi = Wifi()
     WifiHelper.auto_connect(wifi)
-    
