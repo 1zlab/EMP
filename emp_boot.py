@@ -59,3 +59,4 @@ def set_boot_mode():
             f.write(boot_code)
             print(rainbow('Boot mode set to EASY_DEVELOP',color='green'))
         
+    reboot()
