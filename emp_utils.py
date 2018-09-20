@@ -46,7 +46,7 @@ def print_as_a_list_item(index, title, subtile):
 def selection(hint, range):
 
     index = input(rainbow(hint, color='blue'))
-    if int(index) > range and int(index) < 0:
+    if int(index) > range or int(index) < 0:
         print(rainbow('out of range!', color='red'))
         selection(hint, range)
     else:
