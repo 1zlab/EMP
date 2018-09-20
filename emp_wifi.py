@@ -52,7 +52,7 @@ class WifiHelper():
 
     @classmethod
     def add_record(cls, essid, passwd):
-        if cls.is_in_records(essid):
+        if not cls.is_in_records(essid):
             config = cls.read_config()
             config['records'].append((essid, passwd))
             cls.update_profile(config)
