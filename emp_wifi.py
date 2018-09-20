@@ -1,33 +1,22 @@
 import network
 import json
-import gc
-import urequests
-
-def rainbow(output, color=None):
-
-    if color:
-        if color == 'green':
-            return '\033[1;32m%s\033[0m' % output
-        if color == 'red':
-            return '\033[1;31m%s\033[0m' % output
-        if color == 'blue':
-            return '\033[1;34m%s\033[0m' % output
-    else:
-        return output
-
-
-
-# TODO:
-# 建立文件目录 /libs/1zlab
-# 分析1zlab包的功能模块
-# 建立安装选项 http获取 dev.1zlab.com 脚本
-# 建立安装接口
-# 写服务器
-
-
+from emp_utils import rainbow
 
 class WifiHelper():
     profile = 'wifi_config.json'
+
+    @classmethod
+    def create_profile(cls):
+        default = ()
+        records = []
+        default_config = dict(default=default, records=records)
+        cls.update_profile(default_config)
+        print(rainbow('created wifi_config.json', color='blue'))
+
+    @classmethod
+    def update_profile(cls, config):
+        with open(cls.profile, 'w') as f:
+            f.write(json.dumps(config))
 
     @classmethod
     def read_config(cls):
@@ -46,6 +35,10 @@ class WifiHelper():
         return config.get('default') if config else ()
 
     @classmethod
+    def set_default(cls,essid):
+        pass
+
+    @classmethod
     def get_records(cls):
         config = cls.read_config()
         return config.get('records') if config else []
@@ -58,17 +51,12 @@ class WifiHelper():
         return ()
 
     @classmethod
-    def create_profile(cls):
-        default = ()
-        records = []
-        default_config = dict(default=default, records=records)
-        cls.update_profile(default_config)
-        print(rainbow('created wifi_config.json', color='blue'))
-
-    @classmethod
-    def update_profile(cls, config):
-        with open(cls.profile, 'w') as f:
-            f.write(json.dumps(config))
+    def add_record(cls, essid, passwd):
+        if cls.is_in_records(essid):
+            config = cls.read_config()
+            config['records'].append((essid, passwd))
+            cls.update_profile(config)
+            print(rainbow('record %s has been added' % essid, color='green'))
 
     @classmethod
     def del_record(cls, essid):
@@ -84,13 +72,6 @@ class WifiHelper():
         return False
 
     @classmethod
-    def add_record(cls, essid, passwd):
-        config = cls.read_config()
-        config['records'].append((essid, passwd))
-        cls.update_profile(config)
-        print(rainbow('record %s has been added' % essid, color='green'))
-
-    @classmethod
     def update_record(cls, essid, passwd):
         config = cls.read_config()
         for index, i in enumerate(config['records']):
@@ -102,34 +83,39 @@ class WifiHelper():
     @classmethod
     def auto_connect(cls, wifi):
         default = cls.get_default()
-        if default:    
-            records = cls.get_records().insert(0,default)
+        if default:
+            records = cls.get_records().insert(0, default)
         else:
             records = cls.get_records()
         print(records)
         networks = [i.get('essid')[7:-4] for i in wifi.scan()]
 
         for i in records:
-            if i[0] in networks:    
-                print(rainbow('trying to auto connect %s ...'%i[0],color='blue'))
+            if i[0] in networks:
+                print(
+                    rainbow(
+                        'trying to auto connect %s ...' % i[0], color='blue'))
                 if not wifi.do_connect(*i):
-                    print(rainbow('trying to auto connect %s failed'%i[0],color='red'))
+                    print(
+                        rainbow(
+                            'trying to auto connect %s failed' % i[0],
+                            color='red'))
                     cls.del_record(i[0])
                     wifi._wifi.active(True)
                     continue
                 else:
-                    print(rainbow('auto connect %s succeed!'%i[0],color='green'))
+                    print(
+                        rainbow(
+                            'auto connect %s succeed!' % i[0], color='green'))
                     return True
-        print(rainbow('none of records available.',color='red'))
+        print(rainbow('none of records available.', color='red'))
         wifi.before_connect()
-            
 
-            
-class WIFI():
+
+class Wifi():
     def __init__(self):
         self._wifi = network.WLAN(network.STA_IF)
         self._wifi.active(True)
-  
 
     def _list_wifi(self, index, essid, dbm):
         '''
@@ -166,7 +152,7 @@ class WIFI():
         if not self.do_connect(essid[7:-4], passwd):
             self.before_connect()
 
-    def do_connect(self,essid,passwd):
+    def do_connect(self, essid, passwd):
         if not self._wifi.isconnected():
             print('connecting to network...')
             self._wifi.active(True)
@@ -180,18 +166,20 @@ class WIFI():
                 utime.sleep_ms(100)
 
             if not self._wifi.isconnected():
-                self._wifi.active(False)  
-                print(rainbow('wifi connection error, please reconnect',color='red'))
+                self._wifi.active(False)
+                print(
+                    rainbow(
+                        'wifi connection error, please reconnect',
+                        color='red'))
                 return False
-                
+
             else:
-                print('network config:', self._wifi.ifconfig())
-                WifiHelper.add_record(essid,passwd)
+                print(rainbow('network config:%s'%self._wifi.ifconfig(),color='green'))
+                WifiHelper.add_record(essid, passwd)
                 return True
 
 
 if __name__ == '__main__':
-    wifi = WIFI()
+    wifi = Wifi()
     WifiHelper.auto_connect(wifi)
-    from microide import *
-  
+    
