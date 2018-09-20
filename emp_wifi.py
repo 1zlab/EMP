@@ -52,11 +52,10 @@ class WifiHelper():
 
     @classmethod
     def add_record(cls, essid, passwd):
-        if not cls.is_in_records(essid):
-            config = cls.read_config()
-            config['records'].append((essid, passwd))
-            cls.update_profile(config)
-            print(rainbow('record %s has been added' % essid, color='green'))
+        config = cls.read_config()
+        config['records'].append((essid, passwd))
+        cls.update_profile(config)
+        print(rainbow('record %s has been added' % essid, color='green'))
 
     @classmethod
     def del_record(cls, essid):
@@ -160,7 +159,6 @@ class Wifi():
             import utime
 
             for i in range(100):
-                # print('第{}次尝试连接WIFI热点'.format(i))
                 if self._wifi.isconnected():
                     break
                 utime.sleep_ms(100)
@@ -174,8 +172,12 @@ class Wifi():
                 return False
 
             else:
-                print(rainbow('network config:%s'%self._wifi.ifconfig(),color='green'))
-                WifiHelper.add_record(essid, passwd)
+                info = self._wifi.ifconfig()
+                print(rainbow('IP: '+ info[0], color='red'))
+                print(rainbow('netmask: '+ info[1], color='green'))
+                print(rainbow('gate: '+ info[2], color='blue'))
+                if not WifiHelper.is_in_records(essid):
+                    WifiHelper.add_record(essid, passwd)
                 return True
 
 
