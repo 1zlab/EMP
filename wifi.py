@@ -1,7 +1,6 @@
 import network
 import json
 import gc
-import urequests
 
 def rainbow(output, color=None):
 
@@ -14,16 +13,6 @@ def rainbow(output, color=None):
             return '\033[1;34m%s\033[0m' % output
     else:
         return output
-
-
-
-# TODO:
-# 建立文件目录 /libs/1zlab
-# 分析1zlab包的功能模块
-# 建立安装选项 http获取 dev.1zlab.com 脚本
-# 建立安装接口
-# 写服务器
-
 
 
 class WifiHelper():
