@@ -112,7 +112,7 @@ class Wifi():
             else:
                 records = cls.get_records()
             print(records)
-            networks = [i.get('essid')[7:-4] for i in worker.scan()]
+            networks = [i.get('essid') for i in worker.scan()]
             for i in records:
                 if i[0] in networks:
                     print(

@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name = 'emp-1zlab',      
-    version = '0.1.7',
+    version = '0.1.8',
     py_modules = ['emp_wifi','emp_boot','emp_dev','emp_utils'],
     author = 'fuermohao@1zlab.com',        
     author_email = 'fuermohao@outlook.com',
