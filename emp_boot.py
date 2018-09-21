@@ -1,9 +1,7 @@
 from emp_utils import rainbow
-from emp_utils import _const
 from emp_utils import print_as_a_list_item
 from emp_utils import selection
-from emp_wifi import Wifi
-from emp_wifi import WifiHelper
+from emp_utils import _const
 import machine
 
 BOOT_MODE = _const()
