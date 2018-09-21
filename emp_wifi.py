@@ -71,7 +71,7 @@ class Wifi():
         config = cls.read_config()
         config['records'].append((essid, passwd))
         cls.update_profile(config)
-        print(rainbow('record %s has been added' % essid, color='green'))
+        print(rainbow('Added record: %s' % essid, color='green'))
 
     @classmethod
     def del_record(cls, essid):
@@ -80,9 +80,7 @@ class Wifi():
             if essid == i[0]:
                 config['records'].pop(index)
                 cls.update_profile(config)
-                print(
-                    rainbow(
-                        'record %s has been deleted' % essid, color='green'))
+                print(rainbow('Record deleted: %s' % essid, color='green'))
                 return True
         return False
 
@@ -104,7 +102,8 @@ class Wifi():
         worker = NetWorker.worker()
         print(id(worker))
         if worker.is_connected():
-            print(rainbow('You have already established a Wifi connection.',color='green'))
+            s0 = 'You have already established a Wifi connection.'
+            print(rainbow(s0, color='green'))
         else:   
             default = cls.get_default()
             if default:
@@ -115,23 +114,19 @@ class Wifi():
             networks = [i.get('essid') for i in worker.scan()]
             for i in records:
                 if i[0] in networks:
-                    print(
-                        rainbow(
-                            'trying to auto connect %s ...' % i[0], color='blue'))
+                    s1 = 'Trying to connect automatically to %s ...' % i[0]
+                    print(rainbow(s1, color='blue'))
                     if not worker.do_connect(*i):
-                        print(
-                            rainbow(
-                                'trying to auto connect %s failed' % i[0],
-                                color='red'))
+                        s2 = 'Automatic connection to %s failed' % i[0]
+                        print(rainbow(s2,color='red'))
                         cls.del_record(i[0])
                         worker._wifi.active(True)
                         continue
                     else:
-                        print(
-                            rainbow(
-                                'auto connect %s succeed!' % i[0], color='green'))
+                        s3 = 'Automatically connect to %s successfully' % i[0]
+                        print(rainbow(s3, color='green'))
                         return True
-            print(rainbow('none of records available.', color='red'))
+            print(rainbow('No record available', color='red'))
             worker.before_connect()
 
     @classmethod
@@ -150,10 +145,6 @@ class NetWorker():
             cls._instance._essid = None
         return cls._instance
             
-    @classmethod
-    def worker(cls):
-        return NetWorker()
-
     def scan(self):
         def _list_wifi(index, essid, dbm):
             _index = ('[%s]' % str(index)).center(8).lstrip()
@@ -229,6 +220,9 @@ class NetWorker():
         self._wifi.active(False)
         print(rainbow('WIFI connection has been disconnected',color='red'))
     
+    @classmethod
+    def worker(cls):
+        return NetWorker()
 
     
 
