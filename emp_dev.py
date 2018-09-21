@@ -63,4 +63,7 @@ def del_file(filename):
     tree()
 
 
+def run(filename):
+    exec(open(filename).read(), globals())
+
 

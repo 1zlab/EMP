@@ -12,23 +12,20 @@ BOOT_MODE.WITH_WIFI_STARTUP = 1
 BOOT_MODE.EASY_DEVELOP = 2
 
 BOOT_MODE.WITH_WIFI_STARTUP_CODE = '''from emp_wifi import Wifi
-from emp_wifi import WifiHelper
 
 if __name__ == '__main__':
-    wifi = Wifi()
-    WifiHelper.auto_connect(wifi)'''
+    Wifi.connect()'''
 
 BOOT_MODE.EASY_DEVELOP_CODE = '''from emp_wifi import Wifi
-from emp_wifi import WifiHelper
 
 if __name__ == '__main__':
-    wifi = Wifi()
-    WifiHelper.auto_connect(wifi)
+    Wifi.connect()
     import os
     if not 'webrepl_cfg.py' in os.listdir():
         import webrepl_setup
     import webrepl
-    webrepl.start()'''
+    webrepl.start()
+    from emp_dev import *'''
 
 
 
