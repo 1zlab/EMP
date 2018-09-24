@@ -1,11 +1,9 @@
-from emp_wifi import Wifi
-from emp_wifi import WifiHelper
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
 
-if __name__ == '__main__':
-    wifi = Wifi()
-    WifiHelper.auto_connect(wifi)
-    import os
-    if not 'webrepl_cfg.py' in os.listdir():
-        import webrepl_setup
-    import webrepl
-    webrepl.start()
+a = fib(10)

@@ -100,7 +100,6 @@ class Wifi():
     @classmethod
     def connect(cls):
         worker = NetWorker.worker()
-        print(id(worker))
         if worker.is_connected():
             s0 = 'You have already established a Wifi connection.'
             print(rainbow(s0, color='green'))
