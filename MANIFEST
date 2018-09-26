@@ -3,5 +3,6 @@ README.txt
 emp_boot.py
 emp_dev.py
 emp_utils.py
+emp_webrepl.py
 emp_wifi.py
 setup.py

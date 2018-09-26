@@ -1,7 +1,7 @@
 import os
 import json
 import gc
-
+from emp_webrepl import WebREPL
 
 def tree(path='/'):
     root = dict(name=path, children=[])
