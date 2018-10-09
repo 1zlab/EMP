@@ -1,9 +1,10 @@
-def fib(max):
-    n, a, b = 0, 0, 1
-    while n < max:
-        yield b
-        a, b = b, a + b
-        n = n + 1
-    return 'done'
+from emp_wifi import Wifi
 
-a = fib(10)
+if __name__ == '__main__':
+    Wifi.connect()
+    import os
+    if not 'webrepl_cfg.py' in os.listdir():
+        import webrepl_setup
+    from emp_webrepl import WebREPL
+    WebREPL.start()
+    from emp_dev import *

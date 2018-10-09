@@ -22,6 +22,7 @@ class WebREPL():
             cls._instance.ws = None
             cls._instance.listen_s = None
             cls._instance.client_s = None
+            cls._instance.wr = None
         return cls._instance
 
     @classmethod
@@ -56,12 +57,13 @@ class WebREPL():
         WebREPL().client_s = cl
         websocket_helper.server_handshake(cl)
         WebREPL().ws = websocket.websocket(cl, True)
-        WebREPL().ws = _webrepl._webrepl(WebREPL().ws)
-        type(WebREPL().ws)
+
+        WebREPL().wr = _webrepl._webrepl(WebREPL().ws)
+        type(WebREPL().wr)
         cl.setblocking(False)
         # notify REPL on socket incoming data
         cl.setsockopt(socket.SOL_SOCKET, 20, uos.dupterm_notify)
-        uos.dupterm(WebREPL().ws)
+        uos.dupterm(WebREPL().wr)
         
 
     @classmethod

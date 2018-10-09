@@ -21,8 +21,8 @@ if __name__ == '__main__':
     import os
     if not 'webrepl_cfg.py' in os.listdir():
         import webrepl_setup
-    import webrepl
-    webrepl.start()
+    from emp_webrepl import WebREPL
+    WebREPL.start()
     from emp_dev import *'''
 
 

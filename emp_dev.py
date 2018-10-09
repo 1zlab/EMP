@@ -3,33 +3,47 @@ import json
 import gc
 from emp_webrepl import WebREPL
 
-def tree(path='/'):
-    root = dict(name=path, children=[])
-    index = 0
-    dirs = os.listdir(path)
-    for i in dirs:
-        try:
-            root['children'].append(
-                dict(name=i, children=[dict(name=j) for j in os.listdir(i)]))
-        except:
-            root['children'].append(dict(name=i))
 
-    for i in root['children']:
-        if not i.get('children', False):
-            i['index'] = index
-            index += 1
+def depends_on_memory(filename):
+    gc.collect()
+    fsize = os.stat(filename)[6]
+    mf = gc.mem_free()
+    rsp = dict(func='depends_on_memory', fsize=fsize, mf=mf, filename=filename)
+    WebREPL.send(json.dumps(rsp) + '\n\r')
+    gc.collect()
+
+
+def is_folder(path):
+    try:
+        os.listdir(path)
+        return True
+    except:
+        return False
+
+
+def node(path):
+    n = dict(name=path, children=[])
+    for i in os.listdir(path):
+        if is_folder(path + '/' + i):
+            n['children'].append(node(path + '/' + i))
         else:
-            for j in i['children']:
-                j['index'] = index
-                index += 1
-    print(json.dumps(root))
+            n['children'].append(dict(name=i))
+    return n
+
+
+def tree(path='/'):
+    rsp = dict(func='tree', data=node('/'))
+    WebREPL.send(json.dumps(rsp) + '\n\r')
     gc.collect()
 
 
 def get_code(filename):
     gc.collect()
     with open(filename, 'r') as f:
-        print(f.read())
+        rsp = dict(
+            func='get_code', data=dict(code=f.read(), filename=filename))
+        WebREPL.send(json.dumps(rsp) + '\n\r')
+        # print(f.read())
 
 
 def update_code(filename, content):
@@ -61,5 +75,3 @@ def del_folder(folder):
 def del_file(filename):
     os.remove(filename)
     tree()
-
-
