@@ -1,6 +1,7 @@
-# This module should be imported from REPL, not run from command line.
 import socket
+import json
 import uos
+import gc
 import network
 import websocket
 import websocket_helper
@@ -95,3 +96,12 @@ class WebREPL():
         WebREPL().stop()
         s = WebREPL().setup_conn(port, None)
         WebREPL().accept_conn(s)
+
+
+
+def emp_sender(func):
+    def wrapper(*args, **kwargs):     
+        rsp = dict(func=func.__name__, data=func(*args, **kwargs))
+        WebREPL.send(json.dumps(rsp) + '\n\r')
+        gc.collect()
+    return wrapper

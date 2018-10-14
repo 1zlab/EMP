@@ -11,6 +11,23 @@ class _const:
         else:
             self.__dict__[name] = value
 
+def is_folder(path):
+    try:
+        os.listdir(path)
+        return True
+    except:
+        return False
+
+
+def traverse(path):
+    n = dict(name=path, children=[])
+    for i in os.listdir(path):
+        if is_folder(path + '/' + i):
+            n['children'].append(traverse(path + '/' + i))
+        else:
+            n['children'].append(dict(name=i))
+    return n
+
 def config_path():
     try:
         return len(os.listdir('config'))
@@ -86,26 +103,3 @@ def mem_analyze(func):
     return wrapper
 
 
-if __name__ == '__main__':
-    # for i in range(20):
-    #     print(print_as_a_list_item(i,'emp','emp is a micropython lib'))
-
-    print(
-        print_left_just('sdfsdfsd', 30), print_right_just(
-            'sdfsdfsdfsdfsd', 30))
-    print(
-        print_left_just('sdfsdfsdfsdfsd', 30), print_right_just(
-            'sdfsdfsd', 30))
-    print(
-        print_as_a_list_item(
-            0, 'Boot with nothing',
-            'attention: this option will clear up boot.py, careful!'))
-    print(
-        print_as_a_list_item(
-            1, 'Boot with wifi startup',
-            'this mode will auto start wifi connect program.'))
-    print(
-        print_as_a_list_item(
-            2, 'Boot with webrepl startup',
-            'this mode will auto start wifi connect program and enbale webrepl.'
-        ))
