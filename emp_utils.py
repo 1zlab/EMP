@@ -25,7 +25,7 @@ def traverse(path):
         if is_folder(path + '/' + i):
             n['children'].append(traverse(path + '/' + i))
         else:
-            n['children'].append(dict(name=i))
+            n['children'].append(dict(name=path + '/' +i))
     return n
 
 def config_path():

@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name = 'emp-1zlab',      
+    name = 'emp-1zlab-dev',      
     version = '0.1.13',
     py_modules = ['emp_wifi','emp_boot','emp_dev','emp_utils','emp_webrepl'],
     author = 'fuermohao@1zlab.com',        
