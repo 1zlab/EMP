@@ -23,7 +23,7 @@ if __name__ == '__main__':
         import webrepl_setup
     from emp_webrepl import WebREPL
     WebREPL.start()
-    from emp_dev import *'''
+    from emp_ide import *'''
 
 
 

@@ -12,7 +12,7 @@ def device_info():
     return dict(
         platform=sys.platform,
         version=sys.version,
-        implementation=sys.implementation,
+        implementation=[sys.implementation[0], list(sys.implementation[1])],
         maxsize=sys.maxsize / 1024 / 1024)
 
 
@@ -39,7 +39,10 @@ def tree(path='/'):
 def get_code(filename):
     gc.collect()
     with open(filename, 'r') as f:
-        return dict(code=f.read(), filename=filename)
+        code = f.read()
+        rsp = dict(code=code, filename=filename)
+        memory_status()
+        return rsp
 
 
 def new_folder(folder):
@@ -56,10 +59,14 @@ def new_file(filename):
     tree()
 
 
-def del_folder(folder):
-    for i in os.listdir(folder):
-        os.remove(folder + '/' + i)
-    os.rmdir(folder)
+def del_folder(path):
+    for i in os.listdir(path):
+        if is_folder(path + '/' + i):
+            del_folder(path + '/' + i)
+        else:
+            os.remove(path + '/' + i)
+
+    os.rmdir(path)
     tree()
 
 
@@ -75,9 +82,11 @@ def rename(old_name, new_name):
     except:
         pass
 
+
 def emp_install(pkg):
     try:
         upip.install(pkg)
     except:
         import upip
         upip.install(pkg)
+
