@@ -6,6 +6,7 @@ import network
 import websocket
 import websocket_helper
 import _webrepl
+from emp_utils import rainbow
 
 
 class WebREPL():
@@ -41,7 +42,7 @@ class WebREPL():
         for i in (network.AP_IF, network.STA_IF):
             iface = network.WLAN(i)
             if iface.active():
-                print("WebREPL daemon started on ws://%s:%d" % (iface.ifconfig()[0], port))
+                print(rainbow("WebREPL daemon started on ws://%s:%d" % (iface.ifconfig()[0], port), color='green'))
         return WebREPL().listen_s
 
     @classmethod
@@ -89,7 +90,7 @@ class WebREPL():
         else:
             _webrepl.password(password)
             WebREPL().setup_conn(port, WebREPL().accept_conn)
-            print("Started webrepl in manual override mode")
+            print(rainbow("WebREPL started.", color='green'))
 
     @classmethod
     def start_foreground(cls,port=8266):

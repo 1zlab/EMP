@@ -151,7 +151,16 @@ class NetWorker():
             _dbm = rainbow(dbm.center(10).lstrip(),color='blue')
             print('{0} {1} {2} dBm'.format(_index, _essid, _dbm))
         # TODO 字符编码容错
-        networks = [dict(essid=i[0].decode(),dbm=str(i[3])) for i in self._wifi.scan()]
+
+        networks = []
+        for i in self._wifi.scan():
+            try:
+                nw = dict(essid=i[0].decode(), dbm=str(i[3]))
+            except:
+                nw = dict(essid=i[0] , dbm=str(i[3]))
+            finally:
+                networks.append(nw)
+        # networks = [dict(essid=i[0].decode(),dbm=str(i[3])) for i in self._wifi.scan()]
 
         for i, item in enumerate(networks):
             _list_wifi(i, item['essid'], item['dbm'])

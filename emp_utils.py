@@ -37,6 +37,10 @@ def config_path():
         return len(os.listdir('config'))
 
 
+def webrepl_pass():
+    with open('config/webrepl.pass', 'r') as f:
+        return f.read()
+
 def rainbow(output, color=None):
     if color:
         if color == 'green':
