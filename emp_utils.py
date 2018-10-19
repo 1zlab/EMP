@@ -18,6 +18,9 @@ def is_folder(path):
     except:
         return False
 
+def post_ip(ip):
+    import urequests
+    urequests.post('http://www.1zlab.com/ide/post/ip/?esp_ip=%s,' % ip)
 
 def traverse(path):
     n = dict(name=path, children=[])

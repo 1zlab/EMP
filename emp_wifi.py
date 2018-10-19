@@ -95,7 +95,7 @@ class Wifi():
 
     @classmethod
     def ifconfig(cls):
-        NetWorker.worker().ifconfig()
+        return NetWorker.worker().ifconfig()
 
     @classmethod
     def connect(cls):
@@ -236,5 +236,3 @@ class NetWorker():
 
 if __name__ == '__main__':
     Wifi.connect()
-
-

@@ -19,9 +19,11 @@ if __name__ == '__main__':
 BOOT_MODE.EASY_DEVELOP_CODE = '''from emp_wifi import Wifi
 from emp_webrepl import WebREPL
 from emp_utils import webrepl_pass
+from emp_utils import post_ip
 
 if __name__ == '__main__':
     Wifi.connect()
+    post_ip(Wifi.ifconfig()[0][0])
     WebREPL.start(password=webrepl_pass())
     from emp_ide import *'''
 
