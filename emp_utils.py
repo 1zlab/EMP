@@ -109,4 +109,13 @@ def mem_analyze(func):
 
     return wrapper
 
-
+def sync_time():
+    import urequests
+    from machine import RTC
+    rtc = RTC()
+    print('before sync: ', rtc.datetime())
+    time = urequests.get('http://www.1zlab.com/api/get-time/').json()
+    # print(time)
+    rtc.init(tuple(time['rtc']))
+    print('after sync: ', rtc.datetime())
+    
