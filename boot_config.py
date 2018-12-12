@@ -1,4 +1,4 @@
-# wifi 
+# wifi
 enable_wifi = False
 
 # post ip
@@ -14,5 +14,4 @@ webrepl_pass = '1zlab'
 scripts = None
 
 
-
-except ImportError
+# except ImportError
