@@ -32,3 +32,5 @@ for i in range(10):
 
 
 
+for i in dir(machine):
+    print('%s ==> %s' % (i, getattr(machine, i)))

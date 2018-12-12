@@ -1,11 +1,12 @@
-import socket
-import json
-import uos
 import gc
+import json
+import socket
+
+import _webrepl
 import network
+import uos
 import websocket
 import websocket_helper
-import _webrepl
 from emp_utils import rainbow
 
 
